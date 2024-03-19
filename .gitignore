@@ -1,0 +1,10 @@
+cuisine_feature_extractor/
+efficientnetb0_feature_extract_model_mixed_precision/
+efficientnetv2b3_feature_extract_model_mixed_precision/
+fine_tune_checkpoints/
+food-101/
+temp_images/
+testImages/
+.ipynb_checkpoints/
+__pycache__/
+model_83.h5
