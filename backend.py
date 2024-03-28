@@ -4,10 +4,12 @@ os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 import tensorflow_datasets as tfds
 import tensorflow as tf
 tf.get_logger().setLevel('ERROR')
-import streamlit as st
+# import streamlit as st
 
 def loadModel():
     return tf.keras.models.load_model("model_84_9.h5"), tf.keras.models.load_model("cuisine_79_6.h5")
+
+# food_model, cuisine_model = loadModel()
 
 def predict_and_recommend(food_model, cuisine_model, imagePath, similarity=5):
     dataset_info = tfds.builder('food101').info
@@ -30,9 +32,13 @@ def predict_and_recommend(food_model, cuisine_model, imagePath, similarity=5):
     
     topFoods, topCuisines = [], []
 
+    food_pred_return, cuisine_pred_return = [], []
+
     for i in range(similarity):
         idxFood = tf.argmax(food_pred_probs)
+        food_pred_return.append(food_pred_probs[idxFood])
         idxCuisine = tf.argmax(cuisine_pred_probs)
+        cuisine_pred_return.append(cuisine_pred_probs[idxCuisine])
 
         topFoods.append(food_class_names[idxFood])
         topCuisines.append(cuisine_class_names[idxCuisine])
@@ -40,6 +46,6 @@ def predict_and_recommend(food_model, cuisine_model, imagePath, similarity=5):
         food_pred_probs[idxFood] = -1 * float('inf')
         cuisine_pred_probs[idxCuisine] = -1 * float('inf')
 
-    return topFoods, topCuisines
+    return topFoods, topCuisines, food_pred_return, cuisine_pred_return
 
-# print(predict_and_recommend(food_model, cuisine_model, image_path, 5))
+# print(predict_and_recommend(food_model, cuisine_model, "testImages/tacos.jpeg", 10))
